@@ -2,13 +2,13 @@ import time
 from typing import Any
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
-from backend.app.database import SessionLocal
-from backend.app.models import APIKey, RequestLog
+from backend.app.core.database import SessionLocal
+from backend.app.models.api_key import APIKey
+from backend.app.models.request_log import RequestLog
 
 class TelemetryMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next: Any):
         path = request.url.path
-        
         if path.startswith(("/docs", "/openapi.json", "/auth", "/keys", "/analytics")):
             return await call_next(request)
 
@@ -24,9 +24,8 @@ class TelemetryMiddleware(BaseHTTPMiddleware):
         try:
             key_obj = db.query(APIKey).filter(APIKey.key == api_key_header, APIKey.is_active == True).first()
             if key_obj is not None:
-                key_id_val = int(getattr(key_obj, "id"))
                 log_entry = RequestLog(
-                    key_id=key_id_val,
+                    key_id=int(getattr(key_obj, "id")),
                     endpoint=path,
                     status_code=response.status_code,
                     response_time_ms=round(process_time, 2)
