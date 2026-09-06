@@ -110,7 +110,7 @@ export default function AuthCard() {
                                     value={adminKeyInput}
                                     onChange={(e) => setAdminKeyInput(e.target.value)}
                                     className="w-full bg-slate-900 border border-amber-500/50 rounded-lg py-2 pl-10 pr-4 text-white focus:outline-none focus:border-amber-500"
-                                    placeholder="adminsecret123"
+                                    placeholder="Enter admin secret key"
                                 />
                             </div>
                         </div>
