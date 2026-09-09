@@ -82,6 +82,30 @@ Mounts the React application into the DOM tree and imports utility-first styling
 
 To run the entire platform from scratch on your local machine, open three separate PowerShell terminal windows.
 
+### Local and deployed configuration
+
+The backend reads the root `.env`; Vite reads environment files inside
+`frontend`. The checked-in `.env.example` files contain only placeholders and
+are safe to commit. Keep actual `.env` / `.env.local` files private.
+
+For local work, the backend should use a local MySQL URL and
+`DATABASE_SSL=false`. The frontend automatically uses `http://localhost:8000`
+while running `vite`; alternatively, copy `frontend/.env.example` to
+`frontend/.env.local` and set `VITE_API_URL` there. In Vercel, keep
+`VITE_API_URL` set to the Render API URL. In Render, keep its Aiven
+`DATABASE_URL`; SSL remains automatic for non-local database hosts.
+
+If the virtual environment reports that its Python executable is missing,
+recreate it only after installing a supported Python version (3.12 or 3.13):
+
+```powershell
+# From the project root; this removes only the ignored local venv folder.
+Remove-Item -Recurse -Force .\venv
+py -3.13 -m venv venv
+.\venv\Scripts\Activate.ps1
+python -m pip install -r backend\requirements.txt
+```
+
 ### **Terminal 1: Start the Backend Gateway**
 
 Navigate to the project root directory, activate your virtual environment, set the Python module path, and launch the Uvicorn web server:
@@ -105,8 +129,8 @@ Navigate to the `frontend` folder, install Node packages, and boot up the Vite d
 
 ```powershell
 cd C:\Users\ACER\OneDrive\Desktop\apimetric\frontend
-npm install
-npm run dev
+npm.cmd install
+npm.cmd run dev
 
 ```
 

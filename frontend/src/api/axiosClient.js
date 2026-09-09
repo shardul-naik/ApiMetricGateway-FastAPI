@@ -1,7 +1,12 @@
 import axios from 'axios';
 
+// Vercel supplies VITE_API_URL at build time. During `vite` development we
+// deliberately target the local FastAPI process instead.
+const apiBaseUrl = import.meta.env.VITE_API_URL
+    || (import.meta.env.DEV ? 'http://localhost:8000' : undefined);
+
 const axiosClient = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: apiBaseUrl,
 });
 
 axiosClient.interceptors.request.use((config) => {
